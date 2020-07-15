@@ -9,13 +9,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into freeboard(bno, title, writer, content)
 		values(freeboard_seq.nextval, #{title}, #{writer}, #{content})
 	</insert>
-	
+
+
+	<!-- CDATA는 쿼리문 내에 부등호가 있을때 쓰는 태그로, 부등호를 문자열 그대로 인식되도록 합니다-->
 	<select id="getList" resultType="FreeBoardVO">
-		select * from freeboard order by bno desc
+		<![CDATA[
+		select *
+			from(
+				select rownum as rn, bno, title, writer, content, regdate, updatedate
+				from(
+					select * from freeboard order by bno desc
+				)
+			)
+		where rn > (#{pageNum}-1) * #{amount}  and rn <= #{pageNum} * #{amount}
+		order by rn desc
+		]]>
 	</select>
-	
+
 	<select id="getContent" resultType="FreeBoardVO">
-		select * from freeboard where bno = #{bno}
+		select * from freeboard where
+		bno = #{bno}
 	</select>
+
+	<update id="Modify">
+		update freeboard set writer = #{writer}, title =
+		#{title}, content = #{content} where bno = #{bno}
+	</update>
+
+	<delete id="Delete">
+		delete from freeboard where bno = #{bno}
+	</delete>
 	
+	
+	<select id="getTotal" resultType="int">
+		select count(*) as total from freeboard
+	</select>
+
 </mapper>

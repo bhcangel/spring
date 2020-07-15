@@ -40,6 +40,7 @@
 					<!--form select를 가져온다 -->
 					<form>
 						<div class="search-wrap">
+						<span>총 ${pageVO.total }개의 게시글</span>
 							<button type="button" class="btn btn-info search-btn">검색</button>
 							<input type="text" class="form-control search-input"> <select
 								class="form-control search-select">
@@ -83,13 +84,26 @@
 						<div class="text-center">
 							<hr>
 							<ul class="pagination pagination-sm">
-								<li><a href="#">이전</a></li>
-								<li class="active"><a href="#">1</a></li>
-								<li><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#">4</a></li>
-								<li><a href="#">5</a></li>
-								<li><a href="#">다음</a></li>
+
+								<c:if test="${pageVO.prev }">
+								<li><a href="freeList?pageNum=${pageVO.startPage-1 }&amount=${pageVO.amount}">이전</a></li>
+								</c:if>
+
+								<c:forEach var="num" begin="${pageVO.startPage}"
+									end="${pageVO.endPage}">
+
+									<li class="${num == pageVO.pageNum ? 'active' : '' }"><a
+										href="freeList?pageNum=${num }&amount=${pageVO.amount }">${num }</a></li>
+								</c:forEach>
+
+
+								<c:if test="${pageVO.next }">
+								<li><a href="freeList?pageNum=${pageVO.endPage+1 }&amount=${pageVO.amount}">다음</a></li>
+								</c:if>
+								
+								
+								
+								
 							</ul>
 							<button type="button" class="btn btn-info"
 								onclick="location.href='freeRegist'">글쓰기</button>
@@ -106,21 +120,20 @@
 
 
 <script>
-	window.onload = function() {	//화면 로딩이 끝난 직후에 실행
-		
+	window.onload = function() { //화면 로딩이 끝난 직후에 실행
+
 		//기록이 변경 되었다면, 함수종료
-		if(history.state === ''){
+		if (history.state === '') {
 			return;
 		}
-	
-	
+
 		var msg = '${msg}';
-		if(msg !== ''){
+		if (msg !== '') {
 			alert(msg);
 		}
 		// (추가할 데이터, 페이지 제목, 변경할 주소) - 기존기록을 삭제하고 새로운 기록을 추가
 		// 이렇게 추가된 데이터를 history.state 로 확인이 가능
-		history.replaceState('', null, null);	
+		history.replaceState('', null, null);
 	}
 </script>
 
