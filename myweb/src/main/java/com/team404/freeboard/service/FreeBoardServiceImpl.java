@@ -45,9 +45,9 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 	}
 
 	@Override
-	public int getTotal() {
+	public int getTotal(Criteria cri) {
 		
-		return freeBoardMapper.getTotal();
+		return freeBoardMapper.getTotal(cri);
 	}
 
 	

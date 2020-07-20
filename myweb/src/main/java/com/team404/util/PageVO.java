@@ -15,12 +15,15 @@ public class PageVO {
 	private int amount;		//보여질 데이터개수
 	private int total;		//총 게시글 수
 	
+	private Criteria cri;	//게시글 검색 키워드를 저장.
+	
 	//반드시 cri와 total을 전달
 	public PageVO(Criteria cri, int total) {
 		//번호, 개수, 총 게시글 수 세팅
 		this.pageNum = cri.getPageNum();
 		this.amount = cri.getAmount();
 		this.total = total;
+		this.cri = cri;
 		
 		//끝 패이지 계산
 		this.endPage = (int)Math.ceil(this.pageNum/10.0) * 10;

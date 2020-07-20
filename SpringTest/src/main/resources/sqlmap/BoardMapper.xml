@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.simple.board.mapper.BoardMapper">
+
+	<insert id = "regist">
+	insert into pyb(num,big,small,regdate,receptioner_name,receptioner_email,receptioner_phone,title,processing,processor) 
+      VALUES(pyb_seq.nextval,#{big},#{small},#{regdate},#{receptioner_name},#{receptioner_email},#{receptioner_phone},#{title},#{processing},#{processor});
+	</insert>
+</mapper>

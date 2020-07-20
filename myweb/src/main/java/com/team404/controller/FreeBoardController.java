@@ -29,9 +29,9 @@ public class FreeBoardController {
 	public String freeList(Model model, Criteria cri) {
 		
 		ArrayList<FreeBoardVO> list =  freeBoardService.getList(cri);	
-		int total = freeBoardService.getTotal();
-		
+		int total = freeBoardService.getTotal(cri);
 		PageVO pageVO = new PageVO(cri, total);
+		
 		
 		model.addAttribute("boardList", list);
 		model.addAttribute("pageVO", pageVO);

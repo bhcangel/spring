@@ -11,18 +11,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 
 
-	<!-- CDATA는 쿼리문 내에 부등호가 있을때 쓰는 태그로, 부등호를 문자열 그대로 인식되도록 합니다-->
+	<!-- CDATA는 쿼리문 내에 부등호가 있을때 쓰는 태그로, 부등호를 문자열 그대로 인식되도록 합니다 -->
 	<select id="getList" resultType="FreeBoardVO">
 		<![CDATA[
 		select *
 			from(
 				select rownum as rn, bno, title, writer, content, regdate, updatedate
 				from(
-					select * from freeboard order by bno desc
+					select * 
+					from freeboard 
+					
+		
+		]]>
+
+		<!-- <if test="searchType=='title'">where title like '%'||#{searchName}||'%'</if> 
+			<if test="searchType=='writer'">where writer like '%'||#{searchName}||'%'</if> 
+			<if test="searchType=='content'">where content like '%'||#{searchName}||'%'</if> 
+			<if test="searchType=='titcont'">where titcont like '%'||#{searchName}||'%' 
+			or title like '%'||#{searchName}||'%'</if> <if test="searchType=='' or searchType 
+			== null">where 1 = 1</if> -->
+
+		<!-- 같은 표현인데 위에것은 만약 조건이 같으면 터짐 -->
+
+		<choose>
+			<when test="searchType=='title'">where title like '%'||#{searchName}||'%'</when>
+			<when test="searchType=='writer'">where writer like '%'||#{searchName}||'%'</when>
+			<when test="searchType=='content'">where content like '%'||#{searchName}||'%'</when>
+			<when test="searchType=='titcont'">where titcont like '%'||#{searchName}||'%' or title
+				like '%'||#{searchName}||'%'></when>
+
+			<otherwise> where 1=1 </otherwise>
+		</choose>
+		<![CDATA[
+					order by bno desc
 				)
 			)
 		where rn > (#{pageNum}-1) * #{amount}  and rn <= #{pageNum} * #{amount}
-		order by rn desc
 		]]>
 	</select>
 
@@ -39,10 +63,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="Delete">
 		delete from freeboard where bno = #{bno}
 	</delete>
-	
-	
+
+
 	<select id="getTotal" resultType="int">
 		select count(*) as total from freeboard
+		<if test="searchType=='title'">where title like '%'||#{searchName}||'%'</if>
+		<if test="searchType=='writer'">where writer like '%'||#{searchName}||'%'</if>
+		<if test="searchType=='content'">where content like '%'||#{searchName}||'%'</if>
+		<if test="searchType=='titcont'">where titcont like '%'||#{searchName}||'%' or title like '%'||#{searchName}||'%'</if>
+		<if test="searchType=='' or searchType == null">where 1 = 1</if>
 	</select>
 
 </mapper>
